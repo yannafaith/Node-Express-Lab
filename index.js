@@ -1,10 +1,10 @@
 const express = require('express');
 
-// const db = express.require('./data/db');
-
 const postsRoutes = require('./routes/postsRoutes.js');
 
 const server = express();
+
+server.use(express.json());
 
 server.use('/api/posts', postsRoutes)
 
