@@ -44,6 +44,58 @@ router.post('/', (req, res) => {
 });
 
 
+// ============  DELETE endpoint
+
+router.delete('/:id', (req, res) => {
+    const postId = req.params.id;
+    db.findById(postId)
+        .then(post => {
+            db.remove(postId)
+                .then(deletion => {
+                    if (!deletion) {
+                        res.status(404).json({ message: "The post with the specified ID does not exist."})
+                    }
+                    else {
+                        res.status(200).json({post})
+                    }
+                })
+                .catch(() => {
+                    res.status(500).json({error: "The post could not be removed"})
+                })
+        })
+        .catch(() => {
+            res.status(500).json({error: "workaround didn't work"})
+        })
+});
+
+// ============  PUT endpoint
+
+router.put('/:id', (req, res) => {
+    const id = req.params.id;
+    const postUpdate = req.body;
+
+    db.update(id, postUpdate)
+        .then(postMatch => {
+            if (!postMatch) {
+                res.status(404).json({message: "The post with the specified ID does not exist."})
+            }
+            else if (!postUpdate.title || !postUpdate.contents) {
+                res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+            }
+            else {
+                res.status(200).json(postUpdate)
+            }
+        })
+        .catch(() => {
+            res.status(500).json({error: "The post information could not be modified."})
+        })
+});
+
+
+
+
+
+
 
 
 
